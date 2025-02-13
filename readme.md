@@ -52,6 +52,10 @@ Set up the directory so that any newly created items will match these permission
 ```
 sudo chmod +s /opt
 ```
+You can examine the directory's permissions once created by ..
+```
+sudo ls -lR /opt
+```
 
 ### Add Users to Group
 Add ourselves and the unprivileged container user to the group, granting them access while maintaining ownership.<br><br>
