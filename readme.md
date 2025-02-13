@@ -1,10 +1,10 @@
 # Debian Server
 This is not "rootless" Docker. The default arrangement that Docker imposes on users is that the Docker daemon runs as the root user on the system, and so do all the containers within. Rootless Docker is where the actual Docker daemon has no root privileges. The setup I am arranging below is actually the Docker daemon running as root, but the containers are running rootless. In a very simple rundown; rootless Docker protects the system if the Docker daemon itself has flaws, whereas, what I am setting up below protects the system if the container has flaws, but not the daemon. You will have to decide what is best for your threat model.
-## Prerequesites
+## 📜 Prerequesites
 1. Installing Debian - https://www.debian.org/releases/bookworm/debian-installer/
 2. Installing Docker - https://docs.docker.com/engine/install/debian/#install-using-the-repository
 
-## Setup Container User
+## 👤 Setup Container User
 We're prefixing `sudo` on the commands below since we're dealing with permissions.
 > If you're currently `root` you can skip `sudo`.
 
@@ -75,7 +75,7 @@ Make sure that in your `docker-compose.yaml` or Docker run commands that you inc
 > **Note about Traefik Reverse Proxy**<br>
 > Traefik will refuse to start if it's `acme.json` file has the permissions of 700, to remedy this run `sudo chmod 600 acme.json`. All other files and folders in Traefik do not seem to require this adjustment.
 
-## Create Docker Compose Files
+## 📃 Create Docker Compose Files
 We can now get started with the fun part of actually creating a docker compose file and adding services! To create the files run the following ..
 ```
 cd /opt && sudo touch docker-compose.yaml && sudo touch .env
