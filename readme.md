@@ -71,7 +71,7 @@ sudo usermod -a -G docker_opt containedude
 ```
 
 ### Applying to Containers and Limitations
-Make sure that in your `docker-compose.yaml` or Docker run commands that you include the user environment variable, using `user:` and `--user` respectively. Currently containers that require access to the docker socket will fail running as an unprivileged user. There are also times where the container demands specific permissions on certain files.
+Make sure that in your `docker-compose.yaml` or Docker run commands that you include the user environment variable, using `user:` and `--user` respectively. Currently containers that require access to the docker socket will fail running as an unprivileged user. There are also times where the container demands specific permissions on certain files. There are also times where containers will attempt to write to privileged directories and fail if there's no volume setup for those directories, for example `/data`, even if you don't actually need the data stored in those directories on the host you may need to add them to the volumes section.
 > **Note about Traefik Reverse Proxy**<br>
 > Traefik will refuse to start if it's `acme.json` file has the permissions of 700, to remedy this run `sudo chmod 600 acme.json`. All other files and folders in Traefik do not seem to require this adjustment.
 
