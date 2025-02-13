@@ -61,5 +61,15 @@ Add the unprivileged container user to the new group.
 sudo usermod -a -G docker_opt containedude
 ```
 
-### Applying to Containers
-Make sure that in your `docker-compose.yaml` or Docker run commands that you include the user environment variable, using `user:` and `--user` respectively.
+### Applying to Containers and Limitations
+Make sure that in your `docker-compose.yaml` or Docker run commands that you include the user environment variable, using `user:` and `--user` respectively. Currently containers that require access to the docker socket will fail running as an unprivileged user. There are also times where the container demands specific permissions on certain files.
+> **Note about Traefik Reverse Proxy**<br>
+> Traefik will refuse to start if it's `acme.json` file has the permissions of 700, to remedy this run `sudo chmod 600 acme.json`. All other files and folders in Traefik do not seem to require this adjustment.
+
+If you plan on keeping your `.env` and `docker-compose.yaml` files or other sensitive data within this folder, in my example `/opt`, be sure to run the following commands on those files so that the unprivileged user can't access them.
+```
+sudo chown myuser:myusergroup docker-compose.yaml
+```
+```
+sudo chmod 600 docker-compose.yaml
+```
