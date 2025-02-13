@@ -8,33 +8,39 @@ This is not "rootless" Docker. The default arrangement that Docker imposes on us
 We're prefixing `sudo` on the commands below since we're dealing with permissions.
 > If you're currently `root` you can skip `sudo`.
 
+Things you should determine yourself .. ( hopefully you just know what I'm doing. )
+> containedude = the username I chose for my unprivileged container user, this can be whatever you like.<br>
+> myuser = this is your username or it's ID, be sure to use your own username and ID in its place.<br>
+> docker_opt = the group name I chose for the shared group between myself and the unprivileged container user.<br>
+> /opt = the directory I chose to setup all this stuff.<br>
+
 ### Create an Unprivileged User
-Create the user that your docker containers will run as, enabled using either `user: ` in docker compose, or `--user` in docker run commands to spin up the containers. Note that not declaring a user in this way when starting containers will defaultly run them as the root user. You can pick a fun name for this user, I chose `containedude`.
+Create the user that your docker containers will run as, enabled using either `user: ` in docker compose, or `--user` in docker run.
 ```
 sudo useradd -u 1001 -M -s /usr/sbin/nologin containedude
 ```
 
 ### Create a Shared Group
-This group will become the shared space betweem you and the new container user, allowing containers to use their configs and directories while still maintaining you as the owner. Once again the actual name here doesn't matter, feel free to get creative and make it memorable. Just be careful the group doesn't already exist, an output of `sudo groups`.
+Becomes the shared space betweem you and the new container user, containers can read and write but you're the owner.
 ```
 sudo groupadd docker_opt
 ```
 
 ### Make Directories and set Permissions
-Before we connect `containedude` to `docker_opt`, we can make some folders and setup their permissions. The folder I am creating below exists already in most linux setups, so then you'd just have to modifiy its permissions. You don't have to use the directory I've chose below. Replace `myuser` with your username, an output of command `whoami`.<br><br>
-Creates the directory.
+Before we connect `containedude` to `docker_opt`, we can make some folders and setup their permissions.<br><br>
+Create the directory. `/opt` may already exist.
 ```
 sudo mkdir /opt
 ```
-Changes the group of the directory.
+Change the group of the desired directory.
 ```
 sudo chgrp -R docker_opt /opt
 ```
-Takes ownership and sets group of the directory.
+Take ownership and set the group of the desired directory.
 ```
 sudo chown -R myuser:docker_opt /opt
 ```
-Permits equal rights for group and owner of the directory.
+Permit equal rights for the group and owner of the desired directory.
 > The `770` represents the following permissions ..
 > <br>7 = rwx = file or foler owner granted read write executable permissions.
 > <br>7 = rwx = file or folder group granted read write executable permissions.
@@ -42,14 +48,14 @@ Permits equal rights for group and owner of the directory.
 ```
 sudo chmod -R 770 /opt
 ```
-Sets up the directory so that any newly created items will match these permission settings.
+Set up the directory so that any newly created items will match these permission settings aforementioned.
 ```
 sudo chmod +s /opt
 ```
 
 ### Add Users to Group
-Once everything is ready we can add ourselves and the unprivileged container user to the group, effectively granting them access while maintaining ownership.<br><br>
-Add yourself to the new user group.
+Add ourselves and the unprivileged container user to the group, granting them access while maintaining ownership.<br><br>
+Add yourself to the new group.
 > Logging out and back in or rebooting the computer is required before this takes affect.
 > <br> Don't know who you are? run `whoami` after login.
 ```
