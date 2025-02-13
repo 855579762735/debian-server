@@ -6,7 +6,8 @@ This is not "rootless" Docker. The default arrangement that Docker imposes on us
 ## Installing Docker
 
 ## Setup Container User
-We're prefixing `sudo` on the commands below since we're dealing with permissions. If you're currently `root` you can skip `sudo`.
+We're prefixing `sudo` on the commands below since we're dealing with permissions.
+> If you're currently `root` you can skip `sudo`.
 
 ### Create an Unprivileged User
 Create the user that your docker containers will run as, enabled using either `user: ` in docker compose, or `--user` in docker run commands to spin up the containers. Note that not declaring a user in this way when starting containers will defaultly run them as the root user. You can pick a fun name for this user, I chose `containedude`.
